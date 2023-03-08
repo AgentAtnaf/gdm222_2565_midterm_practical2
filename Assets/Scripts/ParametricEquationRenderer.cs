@@ -5,8 +5,6 @@ using UnityEngine;
 public class ParametricEquationRenderer : MonoBehaviour
 {
     [SerializeField]
-    //  This component handles a line rendering given
-    //  a set of positions (3D points).
     private LineRenderer lineRenderer;
 
     [SerializeField]
@@ -32,18 +30,15 @@ public class ParametricEquationRenderer : MonoBehaviour
 
     void Start()
     {
-        Vector3[] points = new Vector3[4];
-        points[0] = new Vector3(1, 1, 0);
-        points[1] = new Vector3(-1, 1, 0);
-        points[2] = new Vector3(-1, -1, 0);
-        points[3] = new Vector3(1, -1, 0);
-
-        //  Before setting a line renderer positions, the position
-        //  count must be set first.
-        lineRenderer.positionCount = 4;
-
-        //  This statement sets a line renderer positions.
-        //  Old positions are overridden.
-        lineRenderer.SetPositions(points);
+        List<Vector3> points = new List<Vector3>();
+        float delta = (maxParameter - minParameter) / step;
+        for (float t = minParameter; t <= maxParameter; t += delta)
+        {
+            float x = Mathf.Cos(2f * Mathf.PI * (a * t + b));
+            float y = Mathf.Sin(2f * Mathf.PI * (c * t + d));
+            points.Add(new Vector3(x, y, 0f));
+        }
+        lineRenderer.positionCount = points.Count;
+        lineRenderer.SetPositions(points.ToArray());
     }
 }
